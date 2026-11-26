@@ -1,5 +1,5 @@
 {
-  "name": "agent-harness",
+  "name": "agent-runtime",
   "version": "0.1.0",
   "description": "生产级 Agent 运行时：状态机 + 中断恢复 + 多 Agent 委派 + MCP 客户端/服务端 + Skill 加载 + 事件溯源 + 指标 + 评测",
   "type": "module",

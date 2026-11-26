@@ -131,7 +131,7 @@ flowchart LR
 ## 六、快速开始
 
 ```bash
-git clone https://github.com/rnnhean/agent-harness.git
+git clone https://github.com/rnnhean/agent-runtime.git
 cd agent-harness
 
 npm test          # 42 个测试
