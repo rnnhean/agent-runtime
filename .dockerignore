@@ -1,0 +1,11 @@
+node_modules
+runs
+results
+test
+*.md
+.env*
+.git
+.github
+demo*.mjs
+eval
+examples/skills/*/scripts

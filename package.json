@@ -1,0 +1,23 @@
+{
+  "name": "agent-harness",
+  "version": "0.1.0",
+  "description": "生产级 Agent 运行时：状态机 + 中断恢复 + 多 Agent 委派 + MCP 客户端/服务端 + Skill 加载 + 事件溯源 + 指标 + 评测",
+  "type": "module",
+  "license": "MIT",
+  "main": "./src/index.mjs",
+  "exports": {
+    ".": "./src/index.mjs",
+    "./mcp-server": "./src/mcp/server.mjs"
+  },
+  "files": ["src", "examples", "README.md", "env.example", "Dockerfile"],
+  "scripts": {
+    "test": "node --test",
+    "demo": "node demo.mjs",
+    "demo:live": "node demo-live.mjs",
+    "eval": "node eval/run.mjs",
+    "serve": "node src/server.mjs",
+    "mcp": "node src/mcp/server.mjs"
+  },
+  "keywords": ["agent", "harness", "mcp", "multi-agent", "state-machine", "llm"],
+  "engines": { "node": ">=20" }
+}
