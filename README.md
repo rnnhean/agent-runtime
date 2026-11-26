@@ -1,4 +1,4 @@
-# agent-harness
+# agent-runtime
 
 > 生产级 Agent 运行时：**状态机 + 中断恢复 + 多 Agent 委派 + MCP 客户端/服务端 + Skill 加载 + 事件溯源 + 指标 + 评测**。
 
@@ -132,7 +132,7 @@ flowchart LR
 
 ```bash
 git clone https://github.com/rnnhean/agent-runtime.git
-cd agent-harness
+cd agent-runtime
 
 npm test          # 42 个测试
 npm run demo      # 离线演示：技能加载 / 错误分类 / 中断恢复
@@ -146,7 +146,7 @@ npm run mcp
 ### 接入真实模型
 
 ```js
-import { createAgent, anthropicClient, buildExampleTools } from 'agent-harness';
+import { createAgent, anthropicClient, buildExampleTools } from 'agent-runtime';
 
 const agent = createAgent({
     llm: anthropicClient({ model: process.env.LLM_MODEL, baseUrl: process.env.LLM_BASE_URL }),
@@ -165,7 +165,7 @@ const r = await agent.run('我的订单 A1001 到哪了');
 ```json
 {
   "mcpServers": {
-    "agent-harness": { "command": "node", "args": ["/path/to/agent-harness/src/mcp/server.mjs"] }
+    "agent-runtime": { "command": "node", "args": ["/path/to/agent-runtime/src/mcp/server.mjs"] }
   }
 }
 ```
@@ -175,8 +175,8 @@ const r = await agent.run('我的订单 A1001 到哪了');
 ## 七、部署
 
 ```bash
-docker build -t agent-harness .
-docker run -p 8790:8790 --env-file env.example agent-harness
+docker build -t agent-runtime .
+docker run -p 8790:8790 --env-file env.example agent-runtime
 ```
 
 | 路由 | 说明 |
