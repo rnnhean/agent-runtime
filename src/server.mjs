@@ -5,7 +5,8 @@
  * 所以必须「立刻返回 runId，后台跑，前端轮询/看轨迹」。同步等待 10 分钟是不可接受的。
  */
 import { createServer } from 'node:http';
-import { pathToFileURL } from 'node:url';
+import { pathToFileURL, fileURLToPath } from 'node:url';
+import path from 'node:path';
 import fs from 'node:fs';
 
 import { EventLog } from './core/eventlog.mjs';
@@ -16,6 +17,24 @@ import { anthropicClient, ScriptedClient } from './core/llm.mjs';
 
 const MAX_BODY = 2 * 1024 * 1024;
 const EVENT_DIR = process.env.EVENT_DIR || './runs';
+
+// React 控制台构建产物（web/dist）。未构建时给明确提示而不是白屏。
+const DIST_DIR = [process.env.WEB_DIST_DIR, fileURLToPath(new URL('../web/dist', import.meta.url))].find((d) => {
+    try {
+        return d && fs.existsSync(path.join(d, 'index.html'));
+    } catch {
+        return false;
+    }
+}) || null;
+const MIME = {
+    '.html': 'text/html; charset=utf-8',
+    '.js': 'text/javascript; charset=utf-8',
+    '.css': 'text/css; charset=utf-8',
+    '.svg': 'image/svg+xml',
+    '.png': 'image/png',
+    '.ico': 'image/x-icon',
+    '.json': 'application/json; charset=utf-8',
+};
 
 const json = (res, code, body) => {
     const s = JSON.stringify(body);
@@ -70,6 +89,18 @@ export function createApp({ metrics = new Metrics(), makeLlm } = {}) {
 
     return createServer(async (req, res) => {
         const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+
+        // React 控制台：SPA 静态托管（/api /health /metrics 优先）
+        if (req.method === 'GET' && !url.pathname.startsWith('/api/') && url.pathname !== '/health' && url.pathname !== '/metrics') {
+            if (!DIST_DIR) return json(res, 503, { error: '前端未构建：请在 web/ 下执行 npm install && npm run build' });
+            const rel = url.pathname === '/' ? 'index.html' : url.pathname.replace(/^\/+/, '');
+            const target = path.join(DIST_DIR, rel);
+            const inside = path.resolve(target).startsWith(path.resolve(DIST_DIR));
+            const file = inside && fs.existsSync(target) && fs.statSync(target).isFile() ? target : path.join(DIST_DIR, 'index.html');
+            if (!fs.existsSync(file)) return json(res, 503, { error: '前端产物缺失' });
+            res.writeHead(200, { 'content-type': MIME[path.extname(file)] || 'application/octet-stream' });
+            return res.end(fs.readFileSync(file));
+        }
 
         if (req.method === 'GET' && url.pathname === '/health') {
             return json(res, 200, {

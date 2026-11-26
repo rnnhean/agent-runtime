@@ -9,7 +9,13 @@
     ".": "./src/index.mjs",
     "./mcp-server": "./src/mcp/server.mjs"
   },
-  "files": ["src", "examples", "README.md", "env.example", "Dockerfile"],
+  "files": [
+    "src",
+    "examples",
+    "README.md",
+    "env.example",
+    "Dockerfile"
+  ],
   "scripts": {
     "test": "node --test",
     "demo": "node demo.mjs",
@@ -18,6 +24,18 @@
     "serve": "node src/server.mjs",
     "mcp": "node src/mcp/server.mjs"
   },
-  "keywords": ["agent", "harness", "mcp", "multi-agent", "state-machine", "llm"],
-  "engines": { "node": ">=20" }
+  "keywords": [
+    "agent",
+    "harness",
+    "mcp",
+    "multi-agent",
+    "state-machine",
+    "llm"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "playwright": "^1.65.1"
+  }
 }

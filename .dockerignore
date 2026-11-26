@@ -1,11 +1,10 @@
-node_modules
+**/node_modules
+web/dist
+test
+e2e
 runs
 results
-test
 *.md
 .env*
 .git
 .github
-demo*.mjs
-eval
-examples/skills/*/scripts
